@@ -7,6 +7,12 @@
 *.obj
 *.elf
 
+# Jetbrains
+*.idea
+
+#CMake
+cmake-build-debug/*
+
 # Linker output
 *.ilk
 *.map
