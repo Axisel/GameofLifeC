@@ -11,4 +11,10 @@ void set_alive(int grid[SIZE][SIZE], int i, int j);
 
 void initalize(int grid[SIZE][SIZE]);
 
+void update_cell(int grid[SIZE][SIZE], int i, int j);
+
+void copy_array(int grid[SIZE][SIZE], int grid2[SIZE][SIZE]);
+
+int compute_neighbors(int grid[SIZE][SIZE], int i, int j)
+
 #endif //MAIN_H

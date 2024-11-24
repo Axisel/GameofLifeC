@@ -18,10 +18,11 @@ int compute_neighbors(int grid[SIZE][SIZE], int i, int j)
       if (k == i && l == j)
         continue;
       if (is_valid(grid, k, l))
-        count += grid[k][l];
+          count += grid[k][l];
     }
   }
 
+  return count;
 }
 
 void initalize(int grid[SIZE][SIZE])
@@ -29,6 +30,7 @@ void initalize(int grid[SIZE][SIZE])
   set_alive(grid,15,15);
   set_alive(grid,15,16);
   set_alive(grid,15,17);
+  set_alive(grid,14,16);
 }
 
 void set_alive(int grid[SIZE][SIZE], int i, int j)
@@ -54,6 +56,23 @@ void render_grid(int grid[SIZE][SIZE])
     }
     printf("\n");
   }
+}
+
+void copy_array(int grid[SIZE][SIZE], int grid2[SIZE][SIZE])
+{
+  for (int i = 0; i < SIZE; i++)
+  {
+    for (int j = 0; j < SIZE; j++)
+    {
+      grid2[i][j] = grid[i][j];
+    }
+  }
+}
+
+void update_cell(int grid[SIZE][SIZE], int i, int j)
+{
+  int alive_neighbors = compute_neighbors(grid, i, j);
+  grid[i][j] = alive_neighbors == 3 || (grid[i][j] == 1 && alive_neighbors == 2);
 }
 
 int main( int argc, char **argv) {
