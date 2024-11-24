@@ -2,6 +2,8 @@
 
 #include "main.h"
 
+#include <stdlib.h>
+
 int is_valid(int grind[SIZE][SIZE], int i, int j)
 {
   return i >= 0 && i < SIZE && j >= 0 && j < SIZE;
@@ -30,17 +32,11 @@ void initalize(int grid[SIZE][SIZE])
   set_alive(grid,15,15);
   set_alive(grid,15,16);
   set_alive(grid,15,17);
-  set_alive(grid,14,16);
 }
 
 void set_alive(int grid[SIZE][SIZE], int i, int j)
 {
   grid[i][j] = 1;
-}
-
-void set_dead(int grid[SIZE][SIZE], int i, int j)
-{
-  grid[i][j] = 0;
 }
 
 void render_grid(int grid[SIZE][SIZE])
@@ -69,14 +65,34 @@ void copy_array(int grid[SIZE][SIZE], int grid2[SIZE][SIZE])
   }
 }
 
-void update_cell(int grid[SIZE][SIZE], int i, int j)
+void update_cell(int gridA[SIZE][SIZE], int gridB[SIZE][SIZE], int i, int j)
 {
-  int alive_neighbors = compute_neighbors(grid, i, j);
-  grid[i][j] = alive_neighbors == 3 || (grid[i][j] == 1 && alive_neighbors == 2);
+  int alive_neighbors = compute_neighbors(gridA, i, j);
+  gridB[i][j] = alive_neighbors == 3 || (gridA[i][j] == 1 && alive_neighbors == 2);
 }
 
-int main( int argc, char **argv) {
-  if ( argc <= 1 ) {
+void launch_life(int gridA[SIZE][SIZE], int gridB[SIZE][SIZE], int generation_count)
+{
+  for (int current_generation = 0; current_generation < generation_count; current_generation++)
+  {
+    for (int i = 0; i < SIZE; i++)
+    {
+      for (int j = 0; j < SIZE; j++)
+      {
+        update_cell(gridA, gridB, i, j);
+      }
+    }
+    printf("Generation : %d\n", current_generation + 1);
+    copy_array(gridB, gridA);
+    render_grid(gridA);
+  }
+
+}
+
+int main(int argc, char **argv)
+{
+  if ( argc <= 1 )
+  {
     printf("Usage: %s [number of generation to compute]\n", argv[0]);
     return 1;
   }
@@ -84,8 +100,9 @@ int main( int argc, char **argv) {
   int gridA[SIZE][SIZE] = {0};
   int gridB[SIZE][SIZE] = {0};
   initalize(gridA);
+    printf("Generation : 0\n");
   render_grid(gridA);
-  printf("%d\n", compute_neighbors(gridA,15,15));
+  launch_life(gridA, gridB, atoi(argv[1]));
 
   return 0;
 }
