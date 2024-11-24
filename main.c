@@ -3,6 +3,7 @@
 #include "main.h"
 
 #include <stdlib.h>
+#include <unistd.h>
 
 int is_valid(int grind[SIZE][SIZE], int i, int j)
 {
@@ -32,6 +33,8 @@ void initalize(int grid[SIZE][SIZE])
   set_alive(grid,15,15);
   set_alive(grid,15,16);
   set_alive(grid,15,17);
+  set_alive(grid,14,17);
+  set_alive(grid,13,16);
 }
 
 void set_alive(int grid[SIZE][SIZE], int i, int j)
@@ -73,8 +76,11 @@ void update_cell(int gridA[SIZE][SIZE], int gridB[SIZE][SIZE], int i, int j)
 
 void launch_life(int gridA[SIZE][SIZE], int gridB[SIZE][SIZE], int generation_count)
 {
-  for (int current_generation = 0; current_generation < generation_count; current_generation++)
+  int current_generation = 0;
+  for (current_generation; current_generation < generation_count; current_generation++)
   {
+    printf("Generation : %d\n", current_generation);
+    render_grid(gridA);
     for (int i = 0; i < SIZE; i++)
     {
       for (int j = 0; j < SIZE; j++)
@@ -82,9 +88,9 @@ void launch_life(int gridA[SIZE][SIZE], int gridB[SIZE][SIZE], int generation_co
         update_cell(gridA, gridB, i, j);
       }
     }
-    printf("Generation : %d\n", current_generation + 1);
     copy_array(gridB, gridA);
-    render_grid(gridA);
+    usleep(500*1000);
+    printf("\x1b[31A\r");
   }
 
 }
@@ -100,8 +106,6 @@ int main(int argc, char **argv)
   int gridA[SIZE][SIZE] = {0};
   int gridB[SIZE][SIZE] = {0};
   initalize(gridA);
-    printf("Generation : 0\n");
-  render_grid(gridA);
   launch_life(gridA, gridB, atoi(argv[1]));
 
   return 0;
